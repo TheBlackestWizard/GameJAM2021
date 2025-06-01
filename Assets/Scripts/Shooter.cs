@@ -15,6 +15,8 @@ public class Shooter : MonoBehaviour
     [SerializeField] private AnimationCurve axisCorrection;
     [SerializeField] private AnimationCurve speedCurve;
 
+    [SerializeField] private CharacterController2D controller;
+
 
     private float shootTimer;
 
@@ -22,8 +24,14 @@ public class Shooter : MonoBehaviour
     {
         shootTimer -= Time.deltaTime;
 
-        if (shootTimer <= 0)
+        if (shootTimer <= 0 )
         {
+            shootTimer = 0;
+        }
+
+        if (shootTimer <= 0 && CharacterController2D.fired)
+        {
+            CharacterController2D.fired = false;
             shootTimer = shootRate;
             Projectile projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity).GetComponent<Projectile>();
             projectile.InitalizeProjectile(target, projectileMaxMoveSpeed, projectileMaxHeight);

@@ -1,3 +1,4 @@
+using Mono.Cecil;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,19 +10,29 @@ public class CharacterController2D : MonoBehaviour
 
     public Rigidbody2D rb;
     public Animator animator;
-    public InputAction playerControls;
+    public InputActionReference move;
+    public InputActionReference fire;
+
+    public static bool fired = false;
 
     Vector2 movement;
 
 
     private void OnEnable()
     {
-        playerControls.Enable();
+        //playerControls.Enable();
+        fire.action.started += Fire;
+        
+    }
+
+    private void Fire(InputAction.CallbackContext obj)
+    {
+        fired = true;
     }
 
     private void OnDisable()
     {
-        playerControls.Disable();
+        //playerControls.Disable();
     }
 
     void Start()
@@ -32,7 +43,7 @@ public class CharacterController2D : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        movement = playerControls.ReadValue<Vector2>();
+        movement = move.action.ReadValue<Vector2>();
 
     }
 
@@ -42,4 +53,5 @@ public class CharacterController2D : MonoBehaviour
 
         rb.linearVelocity = new Vector2 (movement.x * moveSpeed * Time.fixedDeltaTime, movement.y * moveSpeed * Time.fixedDeltaTime);
     }
+
 }
